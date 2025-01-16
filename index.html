@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<!-- HTML Structure -->
+<a href="#" id="randomImageLink">Click to Show Random Image</a>
+<div id="imageContainer"></div>
+
+<script>
+// Array of image URLs and their display counters
+const imageData = [
+  { url: "https://khbvptr.com/wp-content/uploads/2024/09/avatar-anh-meo-cute-1G7hhIx.jpg", count: 0 },
+  { url: "https://khbvptr.com/wp-content/uploads/2024/09/avatar-anh-meo-cute-66qgmQW.jpg", count: 0 },
+  { url: "https://khbvptr.com/wp-content/uploads/2024/09/avatar-anh-meo-cute-8sw0YHH.jpg", count: 0 }
+];
+
+// Maximum times the first image can be displayed
+const maxDisplaysFirstImage = 10;
+
+// Function to handle click and show a random image
+function showRandomImage(event) {
+  event.preventDefault(); // Prevent the default link behavior
+
+  // Check if the first image has reached its maximum display limit
+  if (imageData[0].count < maxDisplaysFirstImage) {
+    // Display the first image
+    imageData[0].count++;
+    displayImage(imageData[0].url);
+
+    // Check if the first image has now reached its limit
+    if (imageData[0].count === maxDisplaysFirstImage) {
+      alert(`The first image has been displayed ${maxDisplaysFirstImage} times.`);
+    }
+    return; // Stop further execution to always show the first image
+  }
+
+  // Filter the remaining images that have not reached their limit
+  const availableImages = imageData.slice(1).filter(image => image.count < maxDisplaysFirstImage);
+
+  if (availableImages.length === 0) {
+    alert("All images have been displayed 10 times.");
+    return; // Stop further execution
+  }
+
+  // Select a random image from the available images
+  const randomIndex = Math.floor(Math.random() * availableImages.length);
+  const selectedImage = availableImages[randomIndex];
+
+  // Update the display count of the selected image
+  selectedImage.count++;
+
+  // Display the selected image
+  displayImage(selectedImage.url);
+
+  // Check if the selected image has now reached its maximum display limit
+  if (selectedImage.count === maxDisplaysFirstImage) {
+    alert(`The following image has been displayed 10 times:\n${selectedImage.url}`);
+  }
+}
+
+// Function to display an image in the container
+function displayImage(url) {
+  const imageContainer = document.getElementById("imageContainer");
+
+  // Clear previous content
+  imageContainer.innerHTML = "";
+
+  // Create a new image element
+  const img = document.createElement("img");
+  img.src = url;
+  img.alt = "Random Image";
+  img.style.maxWidth = "100%";
+  img.style.height = "auto";
+
+  // Append the image to the container
+  imageContainer.appendChild(img);
+}
+
+// Attach event listener to the link
+const randomImageLink = document.getElementById("randomImageLink");
+randomImageLink.addEventListener("click", showRandomImage);
+
+</script>
+
+</body>
+</html>
